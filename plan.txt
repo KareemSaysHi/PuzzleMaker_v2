@@ -1,24 +1,18 @@
-representation of piece:
-- by coordinates
-- set (0, 0, 0) to be bottom front left and go from there
 GUI
-
-- dictionary of pieces:
-    - in pieces.py
-    - entries: numbers
-    - keys: coords of piece
-
-- dictionary of openGL objects:
-    - in gui.py
-    - entries: numbers
-    - keys: vertices of cubes that make piece
-    - uses a function that makes a cube from center pos
-
+- dictionary of pieces
 - dictionary of positions
-    - 
+- dictionary of openGL objects
+- dictionary of colors
 
-- dictionary of colors:
-    - in gui.py
-    - entries: numbers
-    - keys: colors
+- done:
+    - basic pan, rotate, zoom controls with mouse
 
+- to do:
+    - interactions between assembly states and dissassembly depth
+    - zoom into point
+    - start zoomed out instead of being inside
+    - light mode lol
+
+PUZZLE DESIGN: ASSEMBLY
+- to do today:
+    - algorithm for making polyominoes of certain size, returning usable ones in text file
