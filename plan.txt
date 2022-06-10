@@ -1,0 +1,24 @@
+representation of piece:
+- by coordinates
+- set (0, 0, 0) to be bottom front left and go from there
+GUI
+
+- dictionary of pieces:
+    - in pieces.py
+    - entries: numbers
+    - keys: coords of piece
+
+- dictionary of openGL objects:
+    - in gui.py
+    - entries: numbers
+    - keys: vertices of cubes that make piece
+    - uses a function that makes a cube from center pos
+
+- dictionary of positions
+    - 
+
+- dictionary of colors:
+    - in gui.py
+    - entries: numbers
+    - keys: colors
+
