@@ -106,7 +106,7 @@ class GUI():
         
         return cubeDicts
 
-    def render(self):
+    def render(self, fixedColor=False):
         '''
         Given pieceDict and posDict, does all the rendering
         1st: needs to generate cube dictionaries
@@ -121,8 +121,10 @@ class GUI():
         keys = self.pieceDict.keys()
 
         for key in keys:
-            glColor3fv(self.colorDict[key]) #set the color of everything that's being drawn
-
+            if fixedColor == False:
+                glColor3fv(self.colorDict[key]) #set the color of everything that's being drawn
+            else:
+                glColor3fv((1, 0, 0)) #set the color of everything that's being drawn
             currentPiece = self.pieceDict[key]
             currentPos = self.posDict[key]
             currentCubeDicts = self.pieceToOpenGL(currentPiece, currentPos) #returns a list of cube dicts
@@ -151,7 +153,7 @@ class GUI():
                                  
         glEnd()
 
-    def showScreen(self):
+    def showScreen(self, fixedColor=False):
         '''
         performs all the necessary things for camera movement, rotation around origin, pan, zoom
         input: self
@@ -223,7 +225,7 @@ class GUI():
             glMultMatrixf( modelMat )
 
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-            self.render()
+            self.render(fixedColor)
             pygame.display.flip() #flip is the equiv of pygame.display.update()
 
             preMx, preMy = pygame.mouse.get_pos() #must be before wait

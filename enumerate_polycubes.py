@@ -1,4 +1,12 @@
+'''
+Given rank and bounding box, outputs all possible polycubes, excluding symmetries up to rotations
+To do: allow for export in text file format, so this program doesn't have to be run every time we want to do something
+'''
+
 from gui import GUI
+import time
+
+startTime = time.time()
 
 monocubes = [[(0, 0, 0)]]
 bicubes = [[(0, 0, 0), (1, 0, 0)]]
@@ -107,10 +115,10 @@ rotationsAndReflectionsDict = {
     "yg": lambda x, y, z: (-x, y, -z), #rotation 180 of wb about x axis
     "yo": lambda x, y, z: (y, x, -z), #rotation 180 of wo about x axis
 
-    "ob": lambda x, y, z: (z, y, x), #rotation 180 of rg about x axis
-    "oy": lambda x, y, z: (y, -z, x), #rotation 180 of rw about x axis
-    "og": lambda x, y, z: (-z, -y, x), #rotation 180 of rb about x axis
-    "ow": lambda x, y, z: (-y, z, x), #rotation 180 of ry about x axis
+    "ob": lambda x, y, z: (-z, -y, -x), #rotation 180 of rg about x axis
+    "oy": lambda x, y, z: (-y, z, -x), #rotation 180 of rw about x axis
+    "og": lambda x, y, z: (z, y, -x), #rotation 180 of rb about x axis
+    "ow": lambda x, y, z: (y, -z, -x), #rotation 180 of ry about x axis
 
     "gy": lambda x, y, z: (x, z, -y), #rotation 180 of bw about x axis
     "gr": lambda x, y, z: (z, -x, -y), #rotation 180 of bo about x axis
@@ -208,39 +216,24 @@ def nextPolycubes(poly, boundingBox): #tested and works
     #print(polyRankUp)
     return polyRankUp
 
-#bigList = generateRankWithBounds(4, [4, 4, 4])
-#print(len(bigList))
+'''
+bigList = generateRankWithBounds(6, [3, 3, 3])
+print(len(bigList))
+print(time.time()-startTime)
+
+pieceDict = {}
+for i in range (0, len(bigList)):
+    pieceDict[i] = bigList[i]
+
+posDict = {}
+for i in range (0, len(bigList)):
+    posDict[i] = (0, 0, 5*i)
 
 gui = GUI()
-
-pieceDict = {
-    0: [(0, 0, 0), (1, 0, 0), (2, 0, 0), (2, 1, 0)], 
-    1: [(0, 0, 0), (0, 1, 0), (1, 1, 0), (1, 2, 0)], 
-    2: [(0, 0, 0), (0, 1, 0), (1, 0, 0), (1, 1, 0)], 
-    3: [(0, 0, 0), (0, 0, 1), (1, 0, 1), (1, 1, 1)], 
-    4: [(0, 0, 0), (1, 0, 0), (1, 1, 0), (2, 0, 0)], 
-    5: [(0, 0, 1), (1, 0, 0), (1, 0, 1), (1, 1, 1)], 
-    6: [(0, 0, 0), (1, 0, 0), (2, 0, 0), (3, 0, 0)]
-}
-
-posDict = {
-    0: (0, -15, 0),
-    1: (0, -10, 0),
-    2: (0, -5, 0),
-    3: (0, 0, 0),
-    4: (0, 5, 0),
-    5: (0, 10, 0),
-    6: (0, 15, 0),
-}
-
 gui.setPiecesAndPos(pieceDict, posDict)
-gui.showScreen(
+gui.showScreen(fixedColor=True)
+'''
 
-)
-#nextPolycubes([(0, 0, 0), (0, 1, 0), (0, 2, 0)], [3, 3, 3])
 #bigList = generateRankWithBounds(10, [5,5])
 #print(len(bigList))
 #canonical([(-1, 1, 0), (-1, 2, 0), (-2, 2, 0), (-3, 2, 0), (-3, 3, 0), (-3, 3, 1)])
-
-
-
