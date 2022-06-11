@@ -14,5 +14,9 @@ GUI
     - light mode lol
 
 PUZZLE DESIGN: ASSEMBLY
-- to do today:
+- to do 6/10:
     - algorithm for making polyominoes of certain size, returning usable ones in text file
+
+- to do 6/11
+    - finish text file implementation
+    - assembly pt 1! (finish tomorrow if not done)
