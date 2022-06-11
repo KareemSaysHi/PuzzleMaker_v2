@@ -1,6 +1,6 @@
-from prometheus_client import Enum
-from gui import GUI
 import time
+import os
+import os.path
 
 class Enumerator():
 
@@ -44,7 +44,7 @@ class Enumerator():
         }
 
 
-    def generateRankWithBounds(self, n, boundingBox=[3, 3, 3]):
+    def generateRankWithBounds(self, n, boundingBox=[3, 3, 3], overrideTextFile=False):
         '''
         generates all polyominos of rank n that fit within a bounding box
         inputs: rank, 3D bounding box array
@@ -64,6 +64,17 @@ class Enumerator():
             return self.bicubes
         if n == 3:
             return self.tricubes
+        
+        boundingBox.sort(reverse=True)
+        for i in range (0, len(boundingBox)):
+            if boundingBox[i] > n:
+                boundingBox[i] = n #equivalent bounding box, better for matching files
+        fileName = "polyList_rank_" + str(n) + "_bounds_" + str(boundingBox[0]) + "_" + str(boundingBox[1]) + "_" + str(boundingBox[2]) + ".txt"
+
+        if os.path.exists("polyLists/" + str(fileName)): #if the data already exists
+            polyThisRankFinal = self.readDataFromFile(fileName)
+            print("found existing data for rank " + str(n))
+            return polyThisRankFinal
         
         polyLastRank = self.generateRankWithBounds(n-1, boundingBox)
 
@@ -106,7 +117,47 @@ class Enumerator():
         #get rid of rotation and reflection clutter, return final polyominoes
         polyThisRankFinal = [polyGroup[0] for polyGroup in polyThisRankCanonical]
         print("finished rank " + str(n))
+
+        #write data to file
+        self.writeDataToFile(fileName, polyThisRankFinal)
+
         return polyThisRankFinal
+
+    def writeDataToFile(self, fileName, polyList):
+        '''
+        Writes final polyList to file in folder polyList
+        Input: fileName, polyList
+        Output: None
+        '''
+
+        with open("polyLists/" + str(fileName), 'w') as f:
+            for i in range (0, len(polyList)):
+                for j in range (0, len(polyList[i])):
+                    f.write(str(polyList[i][j][0]) + "," + str(polyList[i][j][1]) + "," + str(polyList[i][j][2]))
+                    if j != len(polyList[i]) - 1:
+                        f.write(str(";")) #write semicolon for all but last coord
+                if i != len(polyList) - 1:
+                    f.write("\n") #write \n for all but last line
+            f.close()
+    
+    def readDataFromFile(self, fileName):
+        '''
+        Reads from already created file
+        Input: fileName
+        Output: polyList
+        '''
+
+        with open("polyLists/" + str(fileName), 'r') as f:
+            lines = f.readlines()
+            polyList = []
+            for line in lines:
+                splitted = line.split(';') #splitted 1D array with "x,y,z" in each index
+                for i in range (0, len(splitted)):
+                    splitted[i] = tuple(map(int, splitted[i].split(',')))
+                polyList.append(splitted)
+            f.close()
+        
+        return polyList
 
     def isUnique(self, polyGroup1, polyGroup2): #tested and works
         '''
@@ -217,13 +268,19 @@ class Enumerator():
         #print(polyRankUp)
         return polyRankUp
 
-'''
+    def getTimePassed(self):
+        return time.time() - self.startTime
+
+    def polyListToText(self, polyList):
+        pass
+
+
 enum_polys = Enumerator()
 
-bigList = enum_polys.generateRankWithBounds(6, [3, 3, 3])
+bigList = enum_polys.generateRankWithBounds(7, [3, 3, 3])
 print(len(bigList))
 
-
+'''
 pieceDict = {}
 for i in range (0, len(bigList)):
     pieceDict[i] = bigList[i]
