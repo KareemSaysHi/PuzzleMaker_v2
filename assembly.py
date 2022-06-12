@@ -1,3 +1,5 @@
+from subprocess import CompletedProcess
+from sympy import Q
 from piece import Piece
 from gui import GUI
 
@@ -5,6 +7,7 @@ class Assembly():
     def __init__(self):
         self.piecesWithRotations = []
         self.requiredPositions = []
+        self.repeatedPiecesFlag = False
 
     def set_pieces(self, pieces = []): #pieces is a 2d array
         if len(pieces) < 2:
@@ -18,9 +21,17 @@ class Assembly():
         
         #sort pieces in descending rank and symmetry
         pieceHolderArray = sorted(pieceHolderArray, reverse = True, key = lambda x: (x.getRank(), x.getNumUniqueRotations()))
-            
+
         for piece in pieceHolderArray: #retrieve unique rots
             self.piecesWithRotations.append(piece.getUniqueRotations())
+
+        #check for duplicate pieces
+        for i in range (0, len(self.piecesWithRotations)-1): #each group of piece rotations
+            for j in range(i+1, len(self.piecesWithRotations)):
+                for poly in self.piecesWithRotations[i]:
+                    if poly in self.piecesWithRotations[j]:
+                        self.repeatedPiecesFlag = True
+                        break
 
         #self.piecesWithRotations is now ready
 
@@ -114,5 +125,27 @@ class Assembly():
 
                     assemblyPath.pop() #reset assemblyPath
         
+        #extra stuff if pieces are the same in order to remove redundancies
+        if pieceIndex == 0 and self.repeatedPiecesFlag: #if we've already done everything
+            
+            for i in range (0, len(completeAssemblies)):
+                completeAssemblies[i] = sorted(completeAssemblies[i], key = lambda x: (x[1][0], x[1][1], x[1][2])) #sort by coord placement
+            
+            duplicateList = [] #find duplicates
+            for i in range (0, len(completeAssemblies)-1):
+                for j in range (i+1, len(completeAssemblies)):
+                    if completeAssemblies[i] == completeAssemblies[j]:
+                      duplicateList.append((i,j))
+            
+            for duplicate in duplicateList: #tag duplicates
+                completeAssemblies[duplicate[1]] = None #make the larger number in duplication None
+            
+            x = 0 #remove duplicats
+            while x < len(completeAssemblies):
+                if completeAssemblies[x] == None:
+                    completeAssemblies.pop(x) #don't add 1 to x here cause length decreased
+                else:
+                    x += 1
+                
         return completeAssemblies
 
