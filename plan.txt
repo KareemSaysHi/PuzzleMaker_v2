@@ -37,4 +37,17 @@ for position in possible positions:
  choose largest piece, choose rotation of it
  recursively choose next piece until we're at the last pos
 
+Box symmetry problem 6/12:
     
+    We want to stop solutions where the solution is a rotation of another solution.
+
+    To fix this, I want to find the symmetries of the required positions.
+
+    If I find a rotation that is the same as another, I can restrict the "supplementary" rotation of the first piece in order to stop the solution from happening twice.
+
+    Steps to do this
+        1. find all 24 rotations of required positions
+        2. make a tally of each "type" of repeat, and keep track of OPERATION that creates it
+        3. keep one of each "type" of repeat
+        4. find first piece's "supplementary" rotation of this
+        5. remove that rotation from it's list of "allowable" rotations

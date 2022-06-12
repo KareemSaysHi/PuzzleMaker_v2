@@ -64,6 +64,45 @@ class Assembly():
                 requiredPositions[i] = tuple(requiredPositions[i])
 
         self.requiredPositions = requiredPositions
+
+    def fixRequiredPositionsSymmetryProblem(self):
+        '''
+        We want to stop solutions where the solution is a rotation of another solution.
+
+        To fix this, I want to find the symmetries of the required positions.
+
+        If I find a rotation that is the same as another, I can restrict the "supplementary" rotation of the first piece in order to stop the solution from happening twice.
+
+        Steps to do this
+            1. find all unique rotations of requiredPositions
+            2. find supplement of these unique rotations
+            3. make those the only allowed rotations for piece1
+        '''
+
+        #step 1
+        requiredPositionsPiece = Piece(self.requiredPositions)
+        requiredPositionsPiece.determineUniqueRots() #find unique rots of required positions
+        requiredPositionsUniqueRotations = requiredPositionsPiece.getUniqueRotations()
+        
+        #step 2:
+        requiredPositionsAllRotations = requiredPositionsPiece.getAllCanonicalRots()
+        
+        uniqueIndexLog = [] #finds index of one occurance of all unique rots
+        for uniqueRotation in requiredPositionsUniqueRotations:
+            for i in range (0, requiredPositionsAllRotations):
+                if requiredPositionsAllRotations[i] == uniqueRotation:
+                    uniqueIndexLog.append(i)
+                    break
+            continue
+
+        #step 3:
+        #we need to override self.piecesWithRotations[0]
+        #interesting way to do it, notice that every rotation on a cube has order 4 (some have order 2 but that's basically the same thing), so if we just apply the rotation operation of requiredPositionsUniqueRotations three times to piece0, that's the supplemental rotation we're looking for :D
+
+        self.piecesWithRotations[0] = []
+        for uniqueIndex in uniqueIndexLog:
+            self.piecesWithRotations.append(pieceObject0.getSupplementaryRot(uniqueIndex))
+        #TODO: make a list of piece objects that I can reference for later, put in init
     
     def movedPiece(self, poly, newPos): #input is a 1D poly array
         movedPoly = poly.copy()

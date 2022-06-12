@@ -42,6 +42,28 @@ class Piece():
             "go": lambda x, y, z: (-z, x, -y) #rotation 180 of br about x axis
         }
 
+    def getAllCanonicalRots(self):
+        rotations = self.getRotations() #get rotations
+        
+        canonicalPolys = rotations
+        for i in range (0, len(canonicalPolys)): #make all rotations canonical
+            canonicalPolys[i] = self.canonical(canonicalPolys[i]) #where group[i] is a poly
+
+        return canonicalPolys
+
+    def getSupplementalRot(self, rotNumber): #corresponds to rot key number in dict
+        #see long comment in fixRequiredPositionsSymmetryProblem (assembly.py)
+        rotation = self.piece.copy()
+        
+        for i in range(0, 3):
+            xCoords = [coord[0] for coord in rotation]
+            yCoords = [coord[1] for coord in rotation]
+            zCoords = [coord[2] for coord in rotation]
+
+            rotation = list(map(self.rotationsDict[self.rotationsDict.keys()[rotNumber]], xCoords, yCoords, zCoords))
+
+        return rotation
+
     def determineUniqueRots(self):
         rotations = self.getRotations() #get rotations
         
