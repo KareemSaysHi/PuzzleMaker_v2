@@ -97,10 +97,7 @@ class Assembly():
                     #print(assemblyPath)
 
                     if len(assemblyPath) == numPiecesTotal: #if all pieces put in
-                        print(numPiecesTotal)
-                        print("completed an assembly!")
-                        print(assemblyPath)
-                        completeAssemblies.append(assemblyPath) #add to complete assemblies
+                        completeAssemblies.append(assemblyPath.copy()) #add to complete assemblies
                         #print("appending to completeAssemblies")
                         #print(completeAssemblies) #this part works
 
@@ -109,16 +106,17 @@ class Assembly():
                         print("next level complete assembly looks like")
                         print(nextLevelCompleteAssemblies)
                         for assembly in nextLevelCompleteAssemblies: #append all recursive assemblies
+                            print("WHAT AM I APPENDING")
+                            print(assembly)
                             completeAssemblies.append(assembly)
-                            print("complete assemblies look like")
-                            print(completeAssemblies)
 
                     for coord in pieceInPosition: #reset remainingPositions
                         remainingPositions.append(coord)
 
                     assemblyPath.pop() #reset assemblyPath
         
-        #print (completeAssemblies)
+        print("printing complete assemblies at piece index " + str(pieceIndex))
+        print (completeAssemblies)
         return completeAssemblies
 
 
