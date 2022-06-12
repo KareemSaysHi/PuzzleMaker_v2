@@ -10,6 +10,12 @@ class GUI():
         self.pieceDict = pieceDict
         self.posDict = posDict
 
+        self.mode = ""
+
+        self.assemblyTracker = 0
+        self.assemblyList = []
+
+
         self.colorDict = {
             0: (1, 0, 0),
             1: (0, 1, 0),
@@ -32,6 +38,17 @@ class GUI():
         self.totalMovementZ = 0
 
         self.initPyGame()
+
+        glEnable(GL_DEPTH_TEST)
+
+
+    def set_mode(self, mode="", assemblyList = []):
+        if mode == "assembly":
+            self.assemblyTracker = 0
+            self.assemblyList = assemblyList
+            self.mode = "assembly"
+            self.updateDictsAssembly(assemblyList=assemblyList, assemblyTracker=0)
+
 
     def initPyGame(self, width=800, height=600):
         pygame.init() #initializes pygame
@@ -180,6 +197,23 @@ class GUI():
                     pygame.quit()
                     quit()
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == K_r: #if r, reset camera back to origin
+                       glTranslatef(-1*self.totalMovementX, -1*self.totalMovementY, -1*self.totalMovementZ) #go back to origin
+                       
+                       # TODO: reset camera angle
+
+                    if event.key == K_LEFT and self.mode == "assembly":
+                        change = True
+                        self.assemblyTracker -= 1
+                        if self.assemblyTracker < 0:
+                            self.assemblyTracker += 1
+                    if event.key == K_RIGHT and self.mode == "assembly":
+                        change = True
+                        self.assemblyTracker += 1
+                        if self.assemblyTracker >= len(self.assemblyList):
+                            self.assemblyTracker -= 1
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         self.dragRot = True
@@ -225,40 +259,49 @@ class GUI():
             glMultMatrixf( modelMat )
 
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-            self.render(fixedColor)
+
+            #ASSEMBLY SECTION:
+
+
+            if self.mode == "assembly": #we want to display assembly:
+                print(self.assemblyTracker)
+                print(self.pieceDict)
+                print(self.posDict)
+                
+                change = False
+                for event in pygame.event.get(): #event cycle in pygame, just looking at arrow keys
+
+                    if event.type == pygame.KEYDOWN: #move assembly tracker based on keypress
+                        if event.key == K_LEFT:
+                            print('a')
+                            change = True
+                            self.assemblyTracker -= 1
+                            if self.assemblyTracker < 0:
+                                self.assemblyTracker += 1
+                        if event.key == K_RIGHT:
+                            change = True
+                            self.assemblyTracker += 1
+                            if self.assemblyTracker >= len(self.assemblyList):
+                                self.assemblyTracker -= 1
+
+                if change:
+                    self.updateDictsAssembly(self.assemblyList, self.assemblyTracker)
+
+            self.render()
             pygame.display.flip() #flip is the equiv of pygame.display.update()
 
             preMx, preMy = pygame.mouse.get_pos() #must be before wait
             
             pygame.time.wait(10)
 
-'''
-def main():
+    def updateDictsAssembly(self, assemblyList, assemblyTracker):
+        assemblyToDisplay = assemblyList[assemblyTracker]
+        
+        #will look like [([(0, 0, 0), (0, 0, 1), (1, 1, 1)], (4, 2, 1)), ...]
+        #                   canonical piece coords            position
 
-    pieces = {
-        0: [
-            (0, 0, 0),
-            (0, 0, 1),
-            (0, 1, 1),
-            (1, 1, 1),
-        ],
-
-        1: [
-            (0, 0, 0),
-            (0, 1, 0),
-            (1, 1, 0),
-            (1, 1, 1),
-        ]
-    }
-
-    pos = {
-        0: (0, 0, 0),
-        1: (0, 3, 0)
-    }
-
-    gui = GUI(pieces, pos)
-    gui.showScreen()
-
-main()
-'''
-
+        self.pieceDict = {}
+        self.posDict = {}
+        for i in range(0, len(assemblyToDisplay)):
+            self.pieceDict[i] = assemblyToDisplay[i][0]
+            self.posDict[i] = assemblyToDisplay[i][1]

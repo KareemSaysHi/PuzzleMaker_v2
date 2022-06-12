@@ -1,5 +1,6 @@
 from enumerate_polycubes import Enumerator
 from assembly import Assembly
+from gui import GUI
 from piece import Piece
 
 '''
@@ -18,7 +19,9 @@ assembly1.set_pieces([[(0, 0, 0), (0, 0, 1), (0, 1, 1)], [(0, 0, 0), (0, 0, 1), 
 assembly1.set_canonical_assembly_grid([(0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0), (1, 0, 1), (0, 1, 1), (1, 1, 1)]) #2x2x2 square
 
 completeAssemblies = assembly1.assemble()
-print(completeAssemblies)
+gui = GUI()
+gui.set_mode(mode="assembly", assemblyList=completeAssemblies)
+gui.showScreen()
 
 #piece1 = Piece([(0, 0, 0), (0, 0, 1)])
 #piece1.determineUniqueRots()

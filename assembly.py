@@ -1,4 +1,5 @@
 from piece import Piece
+from gui import GUI
 
 class Assembly():
     def __init__(self):
@@ -103,11 +104,9 @@ class Assembly():
 
                     else: #if not all pieces are put in
                         nextLevelCompleteAssemblies = self.assemble(remainingPositions=remainingPositions, pieceIndex = pieceIndex+1, assemblyPath = assemblyPath) #do next assembly up
-                        print("next level complete assembly looks like")
-                        print(nextLevelCompleteAssemblies)
+
                         for assembly in nextLevelCompleteAssemblies: #append all recursive assemblies
-                            print("WHAT AM I APPENDING")
-                            print(assembly)
+
                             completeAssemblies.append(assembly)
 
                     for coord in pieceInPosition: #reset remainingPositions
@@ -115,12 +114,5 @@ class Assembly():
 
                     assemblyPath.pop() #reset assemblyPath
         
-        print("printing complete assemblies at piece index " + str(pieceIndex))
-        print (completeAssemblies)
         return completeAssemblies
-
-
-    #if current piece index = len(self.pieces) - 1:
-    #   check and see if remaining piece is a possible omino
-
 
