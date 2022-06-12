@@ -273,27 +273,3 @@ class Enumerator():
 
     def polyListToText(self, polyList):
         pass
-
-
-enum_polys = Enumerator()
-
-bigList = enum_polys.generateRankWithBounds(7, [3, 3, 3])
-print(len(bigList))
-
-'''
-pieceDict = {}
-for i in range (0, len(bigList)):
-    pieceDict[i] = bigList[i]
-
-posDict = {}
-for i in range (0, len(bigList)):
-    posDict[i] = (0, 0, 5*i)
-
-gui = GUI()
-gui.setPiecesAndPos(pieceDict, posDict)
-gui.showScreen(fixedColor=True)
-'''
-
-#bigList = generateRankWithBounds(10, [5,5])
-#print(len(bigList))
-#canonical([(-1, 1, 0), (-1, 2, 0), (-2, 2, 0), (-3, 2, 0), (-3, 3, 0), (-3, 3, 1)])

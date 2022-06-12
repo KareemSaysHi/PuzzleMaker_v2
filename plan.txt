@@ -20,3 +20,21 @@ PUZZLE DESIGN: ASSEMBLY
 - to do 6/11
     - finish text file implementation
     - assembly pt 1! (finish tomorrow if not done)
+
+    ideas for 6/11
+
+    abstract box?
+    all canonical positions are at (0,0,0)
+
+    *places it can be in
+    *places it must be in
+
+pseudocode:
+
+
+
+for position in possible positions:
+ choose largest piece, choose rotation of it
+ recursively choose next piece until we're at the last pos
+
+    
