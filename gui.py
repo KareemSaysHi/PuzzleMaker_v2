@@ -191,6 +191,8 @@ class GUI():
 
             glMatrixMode( GL_MODELVIEW );    
             glLoadIdentity()
+
+            self.updateNeeded = False
             
             for event in pygame.event.get(): #event cycle in pygame
                 if event.type == pygame.QUIT: 
@@ -204,12 +206,12 @@ class GUI():
                        # TODO: reset camera angle
 
                     if event.key == K_LEFT and self.mode == "assembly":
-                        change = True
+                        self.updateNeeded = True
                         self.assemblyTracker -= 1
                         if self.assemblyTracker < 0:
                             self.assemblyTracker += 1
                     if event.key == K_RIGHT and self.mode == "assembly":
-                        change = True
+                        self.updateNeeded = True
                         self.assemblyTracker += 1
                         if self.assemblyTracker >= len(self.assemblyList):
                             self.assemblyTracker -= 1
@@ -264,27 +266,10 @@ class GUI():
 
 
             if self.mode == "assembly": #we want to display assembly:
-                print(self.assemblyTracker)
-                print(self.pieceDict)
-                print(self.posDict)
-                
-                change = False
-                for event in pygame.event.get(): #event cycle in pygame, just looking at arrow keys
-
-                    if event.type == pygame.KEYDOWN: #move assembly tracker based on keypress
-                        if event.key == K_LEFT:
-                            print('a')
-                            change = True
-                            self.assemblyTracker -= 1
-                            if self.assemblyTracker < 0:
-                                self.assemblyTracker += 1
-                        if event.key == K_RIGHT:
-                            change = True
-                            self.assemblyTracker += 1
-                            if self.assemblyTracker >= len(self.assemblyList):
-                                self.assemblyTracker -= 1
-
-                if change:
+                if self.updateNeeded:
+                    print(self.assemblyTracker)
+                    print(self.pieceDict)
+                    print(self.posDict)
                     self.updateDictsAssembly(self.assemblyList, self.assemblyTracker)
 
             self.render()
