@@ -23,7 +23,6 @@ gui = GUI()
 gui.set_mode(mode="assembly", assemblyList=completeAssemblies)
 gui.showScreen()
 
-#TODO: add subcase when pieces are equal so you don't have repeated sols
 
 #piece1 = Piece([(0, 0, 0), (0, 0, 1)])
 #piece1.determineUniqueRots()
