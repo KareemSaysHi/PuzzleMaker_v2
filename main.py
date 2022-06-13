@@ -24,7 +24,7 @@ for i in range (0, 3):
         for k in range (0, 3):
             grid.append((i, j, k))
 
-assembly1 = Assembly([piece1, piece4], grid)
+assembly1 = Assembly([piece1, piece2, piece3, piece4], grid)
 
 completeAssemblies = assembly1.assemble()
 gui = GUI()

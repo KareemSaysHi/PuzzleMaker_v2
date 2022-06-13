@@ -18,9 +18,6 @@ class Assembly():
 
         self.fixRequiredPositionsSymmetryProblem()
 
-
-
-
     def set_pieces(self, pieces = []): #pieces is a 2d array
 
         pieceHolderArray = []
@@ -147,23 +144,35 @@ class Assembly():
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
 
-            '''rotationCounter += 1
-            print("currently on piece " + str(pieceIndex))
-            print("with total rotation numbers " + str(len(self.piecesWithRotations[pieceIndex])))
-            print("and rotation " + str(rotationCounter))
-            print(remainingPositions)'''
+            #need to figure out how canonical changes allowable positions:
+            #because canonicals are sorted by x, y, z, first number in list will return us something in 0z plane
 
-            positionCounter = 0
+            zeroZCoord = piece[0]
+            print("one iteration")
+            print(zeroZCoord)
 
-            for position in remainingPositions: #now we iterate through every position it could be in:
-                print(position)
-                positionCounter += 1
+            editedRemainingPositions = remainingPositions.copy()
+            x = 0
+            while x < len(editedRemainingPositions):
+                print(editedRemainingPositions[x])
+                editedRemainingPositions[x] = tuple([editedRemainingPositions[x][i]+zeroZCoord[i] for i in range (0, 3)])
+                print(editedRemainingPositions[x])
+                if editedRemainingPositions[x] not in self.requiredPositions:
+                    editedRemainingPositions.pop(x)
+                else:
+                    x += 1
+            
+            print(editedRemainingPositions)
+ 
+            for position in editedRemainingPositions: #now we iterate through every position it could be in:
                 
                 #print("position and remainingPositions")
                 #print(position)
-                #print(remainingPositions)                
+                #print(remainingPositions)
+                
+                positionToMoveTo = tuple([position[i]-zeroZCoord[i] for i in range (0, 3)])
 
-                pieceInPosition = self.movedPiece(piece, position) #move piece to that pos
+                pieceInPosition = self.movedPiece(piece, positionToMoveTo) #move piece to that pos
 
                 doesntFit = False #check if piece fits
                 for coord in pieceInPosition:
@@ -203,9 +212,6 @@ class Assembly():
                             completeAssemblies.append(assembly)
 
                     assemblyPath.pop() #reset assemblyPath
-
-            print(positionCounter)
-
 
         #extra stuff if pieces are the same in order to remove redundancies
         if pieceIndex == 0:
