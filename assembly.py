@@ -131,15 +131,11 @@ class Assembly():
         if remainingPositions == None: #this means that this is the first piece
             remainingPositions = self.requiredPositions
 
-        #print(pieceIndex)
-        #print(self.piecesWithRotations[pieceIndex])
-
         completeAssemblies = [] #start running list of total assemblies
         #note: assembly path, along with complete assemblies, look like:
         #[(poly array, position), (poly array, position), ...]
 
         numPiecesTotal = len(self.piecesWithRotations)
-        rotationCounter = 0
 
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
@@ -171,7 +167,7 @@ class Assembly():
                 #print(remainingPositions)
                 
                 positionToMoveTo = tuple([position[i]-zeroZCoord[i] for i in range (0, 3)])
-
+                print(positionToMoveTo)
                 pieceInPosition = self.movedPiece(piece, positionToMoveTo) #move piece to that pos
 
                 doesntFit = False #check if piece fits
