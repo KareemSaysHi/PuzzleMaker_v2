@@ -184,6 +184,14 @@ class Assembly():
         #extra stuff if pieces are the same in order to remove redundancies
         if pieceIndex == 0:
             if self.repeatedPiecesFlag: #if we've already done everything
+                '''
+                Note to future Kareem or anyone looking at this:
+                This checker removes identical solutions, but doesn't check if
+                the rotation of a solution is the same as another solution.
+                This would only happen if you used the same piece and a lot 
+                of things have to coincidentally work out, so I'm not going to 
+                worry about fixing it for now.
+                '''
                 
                 completeAssembliesCopy = completeAssemblies.copy() #need a copy to keep colors in order during display
 
