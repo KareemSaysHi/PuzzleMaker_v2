@@ -22,8 +22,6 @@ class Assembly():
 
 
     def set_pieces(self, pieces = []): #pieces is a 2d array
-        if len(pieces) < 2:
-            raise ValueError("assembly must have at least two pieces")
 
         pieceHolderArray = []
         for piece in pieces:  #evaluate unique rots
@@ -136,6 +134,9 @@ class Assembly():
         if remainingPositions == None: #this means that this is the first piece
             remainingPositions = self.requiredPositions
 
+        #print(pieceIndex)
+        #print(self.piecesWithRotations[pieceIndex])
+
         completeAssemblies = [] #start running list of total assemblies
         #note: assembly path, along with complete assemblies, look like:
         #[(poly array, position), (poly array, position), ...]
@@ -143,25 +144,24 @@ class Assembly():
         numPiecesTotal = len(self.piecesWithRotations)
         rotationCounter = 0
 
-        print("beginning of this piece index")
-        print(pieceIndex)
-        print(self.piecesWithRotations[pieceIndex])
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
 
-            rotationCounter += 1
+            '''rotationCounter += 1
             print("currently on piece " + str(pieceIndex))
             print("with total rotation numbers " + str(len(self.piecesWithRotations[pieceIndex])))
             print("and rotation " + str(rotationCounter))
-            print(remainingPositions)
+            print(remainingPositions)'''
+
+            positionCounter = 0
 
             for position in remainingPositions: #now we iterate through every position it could be in:
+                print(position)
+                positionCounter += 1
                 
-                '''if pieceIndex == 0:
-                    print(position)
-                    print(remainingPositions)
-                    print(" ")
-                '''
+                #print("position and remainingPositions")
+                #print(position)
+                #print(remainingPositions)                
 
                 pieceInPosition = self.movedPiece(piece, position) #move piece to that pos
 
@@ -172,9 +172,11 @@ class Assembly():
                         break 
 
                 if doesntFit: #if piece didn't fit
+                    #print("didn't fit")
                     continue #skip to next position
 
                 else: #if it did fit:
+                    #print("fit")
                     remainingPositionsCopy = remainingPositions.copy() #save copy of remainingPositions
                     for coord in pieceInPosition: #update remaining pieces
                         remainingPositionsCopy.remove(coord)
@@ -190,9 +192,9 @@ class Assembly():
                         #print(completeAssemblies) #this part works
 
                     else: #if not all pieces are put in
-                        print("currently going up one level")
-                        print("previous piece has gone in position")
-                        print(position)
+                        #print("currently going up one level")
+                        #print("previous piece has gone in position")
+                        #print(position)
 
                         nextLevelCompleteAssemblies = self.assemble(remainingPositions=remainingPositionsCopy, pieceIndex = pieceIndex+1, assemblyPath = assemblyPath) #do next assembly up
 
@@ -201,7 +203,10 @@ class Assembly():
                             completeAssemblies.append(assembly)
 
                     assemblyPath.pop() #reset assemblyPath
-        
+
+            print(positionCounter)
+
+
         #extra stuff if pieces are the same in order to remove redundancies
         if pieceIndex == 0:
             if self.repeatedPiecesFlag: #if we've already done everything

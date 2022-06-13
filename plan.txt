@@ -54,3 +54,5 @@ Box symmetry problem 6/12:
 
 
 
+issue is not in the actual rotations
+i think it has to do with checking whether or not a piece actually fits
