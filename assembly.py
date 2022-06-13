@@ -4,10 +4,22 @@ from piece import Piece
 from gui import GUI
 
 class Assembly():
-    def __init__(self):
+    def __init__(self, pieces, requiredPositions): #inputs an array of Pieces() and array of required positions
+
+        self.pieceObjects = pieces
         self.piecesWithRotations = []
-        self.requiredPositions = []
         self.repeatedPiecesFlag = False
+
+        self.set_pieces(self.pieceObjects)
+
+        self.requiredPositions = requiredPositions
+
+        self.set_canonical_assembly_grid(self.requiredPositions)
+
+        self.fixRequiredPositionsSymmetryProblem()
+
+
+
 
     def set_pieces(self, pieces = []): #pieces is a 2d array
         if len(pieces) < 2:
@@ -15,12 +27,13 @@ class Assembly():
 
         pieceHolderArray = []
         for piece in pieces:  #evaluate unique rots
-            pieceHolder = Piece(piece)
-            pieceHolder.determineUniqueRots()
-            pieceHolderArray.append(pieceHolder)
+            piece.determineUniqueRots()
+            pieceHolderArray.append(piece)
         
         #sort pieces in descending rank and symmetry
         pieceHolderArray = sorted(pieceHolderArray, reverse = True, key = lambda x: (x.getRank(), x.getNumUniqueRotations()))
+
+        self.pieceObjects = pieceHolderArray #sorted
 
         for piece in pieceHolderArray: #retrieve unique rots
             self.piecesWithRotations.append(piece.getUniqueRotations())
@@ -83,13 +96,15 @@ class Assembly():
         requiredPositionsPiece = Piece(self.requiredPositions)
         requiredPositionsPiece.determineUniqueRots() #find unique rots of required positions
         requiredPositionsUniqueRotations = requiredPositionsPiece.getUniqueRotations()
+        print(requiredPositionsUniqueRotations)
         
         #step 2:
         requiredPositionsAllRotations = requiredPositionsPiece.getAllCanonicalRots()
+        print(requiredPositionsAllRotations)
         
         uniqueIndexLog = [] #finds index of one occurance of all unique rots
         for uniqueRotation in requiredPositionsUniqueRotations:
-            for i in range (0, requiredPositionsAllRotations):
+            for i in range (0, len(requiredPositionsAllRotations)):
                 if requiredPositionsAllRotations[i] == uniqueRotation:
                     uniqueIndexLog.append(i)
                     break
@@ -101,8 +116,10 @@ class Assembly():
 
         self.piecesWithRotations[0] = []
         for uniqueIndex in uniqueIndexLog:
-            self.piecesWithRotations.append(pieceObject0.getSupplementaryRot(uniqueIndex))
-        #TODO: make a list of piece objects that I can reference for later, put in init
+            allowedRotation = self.pieceObjects[0].getSupplementaryRot(uniqueIndex)
+            self.piecesWithRotations[0].append(allowedRotation)
+
+        print(self.piecesWithRotations[0])
     
     def movedPiece(self, poly, newPos): #input is a 1D poly array
         movedPoly = poly.copy()
@@ -165,26 +182,45 @@ class Assembly():
                     assemblyPath.pop() #reset assemblyPath
         
         #extra stuff if pieces are the same in order to remove redundancies
-        if pieceIndex == 0 and self.repeatedPiecesFlag: #if we've already done everything
-            
-            for i in range (0, len(completeAssemblies)):
-                completeAssemblies[i] = sorted(completeAssemblies[i], key = lambda x: (x[1][0], x[1][1], x[1][2])) #sort by coord placement
-            
-            duplicateList = [] #find duplicates
-            for i in range (0, len(completeAssemblies)-1):
-                for j in range (i+1, len(completeAssemblies)):
-                    if completeAssemblies[i] == completeAssemblies[j]:
-                      duplicateList.append((i,j))
-            
-            for duplicate in duplicateList: #tag duplicates
-                completeAssemblies[duplicate[1]] = None #make the larger number in duplication None
-            
-            x = 0 #remove duplicats
-            while x < len(completeAssemblies):
-                if completeAssemblies[x] == None:
-                    completeAssemblies.pop(x) #don't add 1 to x here cause length decreased
-                else:
-                    x += 1
+        if pieceIndex == 0:
+            if self.repeatedPiecesFlag: #if we've already done everything
+                
+                completeAssembliesCopy = completeAssemblies.copy() #need a copy to keep colors in order during display
+
+                for i in range (0, len(completeAssemblies)):
+                    completeAssemblies[i] = sorted(completeAssemblies[i], key = lambda x: (x[1][0], x[1][1], x[1][2])) #sort by coord placement
+                
+                duplicateList = [] #find duplicates
+                for i in range (0, len(completeAssemblies)-1):
+                    for j in range (i+1, len(completeAssemblies)):
+                        if completeAssemblies[i] == completeAssemblies[j]:
+                            duplicateList.append((i,j))
+                
+                for duplicate in duplicateList: #tag duplicates
+                    completeAssemblies[duplicate[1]] = None #make the larger number in duplication None
+                
+                x = 0 #remove duplicates
+                while x < len(completeAssemblies):
+                    if completeAssemblies[x] == None:
+                        completeAssemblies.pop(x) #don't add 1 to x here cause length decreased
+                    else:
+                        x += 1
+
+                y = 0 #transfer info to copy to not lose order
+
+                print("completeAssemblies")
+                print(completeAssemblies)
+
+                print("completeAssembliesCopy")
+                print(completeAssembliesCopy)
+
+                while y < len(completeAssembliesCopy):
+                    if completeAssembliesCopy[y] not in completeAssemblies:
+                        completeAssembliesCopy.pop(y) #don't add 1 to y here cause length decreased
+                    else:
+                        y += 1
+
+                completeAssemblies = completeAssembliesCopy.copy()
                 
         return completeAssemblies
 

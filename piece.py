@@ -51,7 +51,7 @@ class Piece():
 
         return canonicalPolys
 
-    def getSupplementalRot(self, rotNumber): #corresponds to rot key number in dict
+    def getSupplementaryRot(self, rotNumber): #corresponds to rot key number in dict
         #see long comment in fixRequiredPositionsSymmetryProblem (assembly.py)
         rotation = self.piece.copy()
         
@@ -60,7 +60,7 @@ class Piece():
             yCoords = [coord[1] for coord in rotation]
             zCoords = [coord[2] for coord in rotation]
 
-            rotation = list(map(self.rotationsDict[self.rotationsDict.keys()[rotNumber]], xCoords, yCoords, zCoords))
+            rotation = list(map(self.rotationsDict[list(self.rotationsDict.keys())[rotNumber]], xCoords, yCoords, zCoords))
 
         return rotation
 
