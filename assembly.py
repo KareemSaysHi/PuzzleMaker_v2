@@ -96,11 +96,9 @@ class Assembly():
         requiredPositionsPiece = Piece(self.requiredPositions)
         requiredPositionsPiece.determineUniqueRots() #find unique rots of required positions
         requiredPositionsUniqueRotations = requiredPositionsPiece.getUniqueRotations()
-        print(requiredPositionsUniqueRotations)
         
         #step 2:
         requiredPositionsAllRotations = requiredPositionsPiece.getAllCanonicalRots()
-        print(requiredPositionsAllRotations)
         
         uniqueIndexLog = [] #finds index of one occurance of all unique rots
         for uniqueRotation in requiredPositionsUniqueRotations:
@@ -119,7 +117,10 @@ class Assembly():
             allowedRotation = self.pieceObjects[0].getSupplementaryRot(uniqueIndex)
             self.piecesWithRotations[0].append(allowedRotation)
 
-        print(self.piecesWithRotations[0])
+        print("lengths of pieces with rotations")
+        for i in range (0, len(self.piecesWithRotations)):
+            print("piece " + str(i) + ": " + str(len(self.piecesWithRotations[i])))
+
     
     def movedPiece(self, poly, newPos): #input is a 1D poly array
         movedPoly = poly.copy()
@@ -134,16 +135,30 @@ class Assembly():
     def assemble(self, remainingPositions = None, pieceIndex = 0, assemblyPath = []): 
         if remainingPositions == None: #this means that this is the first piece
             remainingPositions = self.requiredPositions
-        
+
         completeAssemblies = [] #start running list of total assemblies
         #note: assembly path, along with complete assemblies, look like:
         #[(poly array, position), (poly array, position), ...]
 
         numPiecesTotal = len(self.piecesWithRotations)
-        
+        rotationCounter = 0
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
+
+            '''
+            rotationCounter += 1
+            print("currently on piece " + str(pieceIndex))
+            print("with total rotation numbers " + str(len(self.piecesWithRotations[pieceIndex])))
+            print("and rotation " + str(rotationCounter))
+            '''
+
             for position in remainingPositions: #now we iterate through every position it could be in:
+                
+                if pieceIndex == 0:
+                    print(position)
+                    print(remainingPositions)
+                    print(" ")
+
                 pieceInPosition = self.movedPiece(piece, position) #move piece to that pos
 
                 doesntFit = False #check if piece fits
@@ -156,8 +171,9 @@ class Assembly():
                     continue #skip to next position
 
                 else: #if it did fit:
+                    remainingPositionsCopy = remainingPositions.copy() #save copy of remainingPositions
                     for coord in pieceInPosition: #update remaining pieces
-                        remainingPositions.remove(coord)
+                        remainingPositionsCopy.remove(coord)
                     
                     assemblyPath.append((piece, position)) #append this piece to assembly path
                     #print("put piece of index " + str(pieceIndex) + " in")
@@ -170,14 +186,16 @@ class Assembly():
                         #print(completeAssemblies) #this part works
 
                     else: #if not all pieces are put in
-                        nextLevelCompleteAssemblies = self.assemble(remainingPositions=remainingPositions, pieceIndex = pieceIndex+1, assemblyPath = assemblyPath) #do next assembly up
+                        '''
+                        print("currently going up one level")
+                        print("previous piece has gone in position")
+                        print(position)
+                        '''
+                        nextLevelCompleteAssemblies = self.assemble(remainingPositions=remainingPositionsCopy, pieceIndex = pieceIndex+1, assemblyPath = assemblyPath) #do next assembly up
 
                         for assembly in nextLevelCompleteAssemblies: #append all recursive assemblies
 
                             completeAssemblies.append(assembly)
-
-                    for coord in pieceInPosition: #reset remainingPositions
-                        remainingPositions.append(coord)
 
                     assemblyPath.pop() #reset assemblyPath
         

@@ -14,13 +14,17 @@ def generatePolycubes(rank, boundingBox=[100, 100, 100]):
 def findAssembies():
     pass
 
-piece1 = Piece([(0, 0, 0), (0, 0, 1), (0, 1, 1)])
-piece2 = Piece([(0, 0, 0), (0, 0, 1), (0, 1, 1)])
-piece3 = Piece([(0, 0, 0), (0, 0, 1)])
-grid = [(0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1), (1, 1, 0), (1, 0, 1), (0, 1, 1), (1, 1, 1)]
+piece1 = Piece([(0, 0, 0), (1, 0, 0), (0, 1, 0), (1, 1, 0), (2, 1, 0), (1, 2, 0), (2, 2, 0), (1, 0, 1), (2, 2, 1)])
+piece2 = Piece([(0, 0, 0), (1, 0, 0), (1, 1, 0), (1, 2, 0), (2, 2, 0), (0, 0, 1), (1, 2, 1)])
+piece3 = Piece([(0, 0, 0), (1, 0, 0), (1, 1, 0), (2, 1, 0), (0, 0, 1)])
+piece4 = Piece([(0, 0, 0), (1, 0, 0), (2, 0, 0), (2, 1, 0), (2, 2, 0), (2, 2, 1)])
+grid = []
+for i in range (0, 3):
+    for j in range(0, 3):
+        for k in range (0, 3):
+            grid.append((i, j, k))
 
-assembly1 = Assembly([piece1, piece2, piece3], grid)
-
+assembly1 = Assembly([piece1, piece4], grid)
 
 completeAssemblies = assembly1.assemble()
 gui = GUI()
