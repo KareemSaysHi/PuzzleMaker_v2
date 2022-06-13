@@ -142,22 +142,26 @@ class Assembly():
 
         numPiecesTotal = len(self.piecesWithRotations)
         rotationCounter = 0
+
+        print("beginning of this piece index")
+        print(pieceIndex)
+        print(self.piecesWithRotations[pieceIndex])
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
 
-            '''
             rotationCounter += 1
             print("currently on piece " + str(pieceIndex))
             print("with total rotation numbers " + str(len(self.piecesWithRotations[pieceIndex])))
             print("and rotation " + str(rotationCounter))
-            '''
+            print(remainingPositions)
 
             for position in remainingPositions: #now we iterate through every position it could be in:
                 
-                if pieceIndex == 0:
+                '''if pieceIndex == 0:
                     print(position)
                     print(remainingPositions)
                     print(" ")
+                '''
 
                 pieceInPosition = self.movedPiece(piece, position) #move piece to that pos
 
@@ -186,11 +190,10 @@ class Assembly():
                         #print(completeAssemblies) #this part works
 
                     else: #if not all pieces are put in
-                        '''
                         print("currently going up one level")
                         print("previous piece has gone in position")
                         print(position)
-                        '''
+
                         nextLevelCompleteAssemblies = self.assemble(remainingPositions=remainingPositionsCopy, pieceIndex = pieceIndex+1, assemblyPath = assemblyPath) #do next assembly up
 
                         for assembly in nextLevelCompleteAssemblies: #append all recursive assemblies
