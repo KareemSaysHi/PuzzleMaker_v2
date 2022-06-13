@@ -16,7 +16,8 @@ class Assembly():
 
         self.set_canonical_assembly_grid(self.requiredPositions)
 
-        self.fixRequiredPositionsSymmetryProblem()
+        if len(self.piecesWithRotations) != 1:
+            self.fixRequiredPositionsSymmetryProblem()
 
     def set_pieces(self, pieces = []): #pieces is a 2d array
 
@@ -137,11 +138,16 @@ class Assembly():
 
         numPiecesTotal = len(self.piecesWithRotations)
 
+        rotationCounter = 0
         #iterate through all of current piece index's rotations 
         for piece in self.piecesWithRotations[pieceIndex]: #each possible rotation
 
             #need to figure out how canonical changes allowable positions:
             #because canonicals are sorted by x, y, z, first number in list will return us something in 0z plane
+            
+            rotationCounter += 1
+            print(piece)
+            print(rotationCounter)
 
             zeroZCoord = piece[0]
             print("one iteration")
@@ -162,11 +168,14 @@ class Assembly():
  
             for position in editedRemainingPositions: #now we iterate through every position it could be in:
                 
-                #print("position and remainingPositions")
-                #print(position)
-                #print(remainingPositions)
+                print("position and remainingPositions")
+                print(position)
+                print(remainingPositions)
+                print("zeroZCoord")
+                print(zeroZCoord)
                 
                 positionToMoveTo = tuple([position[i]-zeroZCoord[i] for i in range (0, 3)])
+                print("positionToMoveTo")
                 print(positionToMoveTo)
                 pieceInPosition = self.movedPiece(piece, positionToMoveTo) #move piece to that pos
 
@@ -186,7 +195,7 @@ class Assembly():
                     for coord in pieceInPosition: #update remaining pieces
                         remainingPositionsCopy.remove(coord)
                     
-                    assemblyPath.append((piece, position)) #append this piece to assembly path
+                    assemblyPath.append((piece, positionToMoveTo)) #append this piece to assembly path
                     #print("put piece of index " + str(pieceIndex) + " in")
                     #print("assembly path looking like")
                     #print(assemblyPath)

@@ -267,10 +267,11 @@ class GUI():
 
             if self.mode == "assembly": #we want to display assembly:
                 if self.updateNeeded:
+                    self.updateDictsAssembly(self.assemblyList, self.assemblyTracker)
+
                     print(self.assemblyTracker)
                     print(self.pieceDict)
                     print(self.posDict)
-                    self.updateDictsAssembly(self.assemblyList, self.assemblyTracker)
 
             self.render()
             pygame.display.flip() #flip is the equiv of pygame.display.update()
