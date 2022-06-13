@@ -51,3 +51,6 @@ Box symmetry problem 6/12:
         3. keep one of each "type" of repeat
         4. find first piece's "supplementary" rotation of this
         5. remove that rotation from it's list of "allowable" rotations
+
+
+

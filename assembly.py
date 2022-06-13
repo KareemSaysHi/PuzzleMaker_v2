@@ -197,28 +197,14 @@ class Assembly():
                             duplicateList.append((i,j))
                 
                 for duplicate in duplicateList: #tag duplicates
-                    completeAssemblies[duplicate[1]] = None #make the larger number in duplication None
+                    completeAssembliesCopy[duplicate[1]] = None #make the larger number in duplication None
                 
                 x = 0 #remove duplicates
-                while x < len(completeAssemblies):
-                    if completeAssemblies[x] == None:
-                        completeAssemblies.pop(x) #don't add 1 to x here cause length decreased
+                while x < len(completeAssembliesCopy):
+                    if completeAssembliesCopy[x] == None:
+                        completeAssembliesCopy.pop(x) #don't add 1 to x here cause length decreased
                     else:
                         x += 1
-
-                y = 0 #transfer info to copy to not lose order
-
-                print("completeAssemblies")
-                print(completeAssemblies)
-
-                print("completeAssembliesCopy")
-                print(completeAssembliesCopy)
-
-                while y < len(completeAssembliesCopy):
-                    if completeAssembliesCopy[y] not in completeAssemblies:
-                        completeAssembliesCopy.pop(y) #don't add 1 to y here cause length decreased
-                    else:
-                        y += 1
 
                 completeAssemblies = completeAssembliesCopy.copy()
                 
